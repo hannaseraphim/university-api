@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { env } from "./src/env.config";
 import Routing from './src/routing'
+import cookieParser from "cookie-parser";
 // ---------------------------
 
 // -------- App Setup ---------
@@ -17,6 +18,7 @@ app.use(
     credentials: true
   })
 );
+app.use(cookieParser());
 // ----------------------------
 
 // -------- Routes -----------
