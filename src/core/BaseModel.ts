@@ -99,7 +99,7 @@ export abstract class BaseModel {
     }
 
     const conditions = keys.map(key => `\`${key}\` = ?`).join(" AND ");
-    const query = `SELECT 1 FROM \`${this.table}\` WHERE ${conditions} LIMIT 1`;
+    const query = `SELECT * FROM \`${this.table}\` WHERE ${conditions}`;
 
     const [rows] = await this.db.execute(query, values);
     return Array.isArray(rows) && rows.length > 0;
