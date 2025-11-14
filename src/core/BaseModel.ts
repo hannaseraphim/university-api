@@ -50,6 +50,12 @@ export abstract class BaseModel {
     return rows as any[];
   }
 
+  async findByEmail(email: string) {
+    const query = `SELECT * FROM \`${this.table}\` WHERE email = ?`;
+    const [rows] = await this.db.execute(query, [email]);
+    return (rows as any)[0];
+  }
+
   // Update item by id
   async update(id: number, data: Record<string, any>): Promise<boolean> {
 
