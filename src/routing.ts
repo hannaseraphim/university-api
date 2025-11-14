@@ -11,20 +11,21 @@ import profileRoutes from './routes/profiles.route.js'
 import submissionRoutes from './routes/submission.route.js'
 import userRoutes from './routes/user.route.js'
 import authRoutes from './routes/auth.route.js'
+import { authMiddleware } from "./middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.use('/activities', activityRoutes);
-router.use('/associated', associatedRoutes);
-router.use('/classes', classRoutes);
-router.use('/courses', courseRoutes);
-router.use('/enrolment', enrolmentRoutes);
-router.use('/grades', gradeRoutes);
-router.use('/history', historyRoutes);
-router.use('/materials', materialRoutes);
-router.use('/profiles', profileRoutes);
-router.use('/submissions', submissionRoutes);
-router.use('/users', userRoutes);
+router.use('/activities', authMiddleware, activityRoutes);
+router.use('/associated', authMiddleware, associatedRoutes);
+router.use('/classes', authMiddleware, classRoutes);
+router.use('/courses', authMiddleware, courseRoutes);
+router.use('/enrolment', authMiddleware, enrolmentRoutes);
+router.use('/grades', authMiddleware, gradeRoutes);
+router.use('/history', authMiddleware, historyRoutes);
+router.use('/materials', authMiddleware, materialRoutes);
+router.use('/profiles', authMiddleware, profileRoutes);
+router.use('/submissions', authMiddleware, submissionRoutes);
+router.use('/users', authMiddleware, userRoutes);
 router.use('/auth', authRoutes);
 
 export default router;
