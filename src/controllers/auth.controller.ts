@@ -14,11 +14,8 @@ export const AuthController = {
             return res.status(400).json({ Error: "Already logged in" });
         }
 
-        const required = await userModel.validateRequiredFields(req.body);
-        const valid = await userModel.validateFields(req.body);
-
-        if(required.length > 0 || valid.length > 0) {
-            return res.status(400).json({ Error: "Invalid or missing fields" });
+        if(!email || !password) {
+            return  res.status(400).json({ Error: "Email and password are required" });
         }
 
         const exists = await userModel.exists({email: email});
