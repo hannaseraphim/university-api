@@ -10,4 +10,11 @@ export class UserModel extends BaseModel {
         super(db);
         this.requiredFields = [...this.fields]
     }
+    
+    // Query item by id
+    async findAssociatedById(id: number) {
+        const query = `SELECT * FROM associated WHERE id_user = ?`;
+        const [rows] = await this.db.execute(query, [id]);
+        return (rows as any)[0];
+    }
 }
