@@ -11,6 +11,7 @@ import profileRoutes from './routes/profiles.route.js'
 import submissionRoutes from './routes/submission.route.js'
 import userRoutes from './routes/user.route.js'
 import authRoutes from './routes/auth.route.js'
+import meRoute from './routes/me.route.js'
 import { authMiddleware } from "./middlewares/auth.middleware.js";
 
 const router = Router();
@@ -26,6 +27,8 @@ router.use('/materials', authMiddleware, materialRoutes);
 router.use('/profiles', authMiddleware, profileRoutes);
 router.use('/submissions', authMiddleware, submissionRoutes);
 router.use('/users', authMiddleware, userRoutes);
+router.use('/me', authMiddleware, meRoute);
 router.use('/auth', authRoutes);
+
 
 export default router;
