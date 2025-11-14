@@ -9,6 +9,11 @@ export const AuthController = {
     login: async (req: Request, res: Response) => { 
         const { email, password } = req.body;
 
+        const cookie = req.cookies['session_token'];
+        if (cookie) {
+            return res.status(400).json({ Error: "Already logged in" });
+        }
+
         const required = await userModel.validateRequiredFields(req.body);
         const valid = await userModel.validateFields(req.body);
 
