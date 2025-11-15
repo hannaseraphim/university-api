@@ -61,7 +61,11 @@ export abstract class BaseModel {
   }
 
   // Update item by id
-  async update(id: number, data: Record<string, any>): Promise<boolean> {
+  async update(
+    id: number,
+    data: Record<string, any>,
+    condition: string
+  ): Promise<boolean> {
     if (Object.keys(data).length === 0) {
       return false;
     }
@@ -85,7 +89,7 @@ export abstract class BaseModel {
     // Adiciona os valores anteriores da data com "...Object.values(data)"
     const values = [...Object.values(data), id];
 
-    const query = `UPDATE \`${this.table}\` SET ${assignments} WHERE id = ?`;
+    const query = `UPDATE \`${this.table}\` SET ${assignments} WHERE ${condition} = ?`;
     await this.db.execute(query, values);
     return true;
   }

@@ -25,7 +25,7 @@ CREATE TABLE associated (
     id_user     INT NOT NULL,
     id_profile  INT NOT NULL,
     PRIMARY KEY(id_user, id_profile),
-    FOREIGN KEY(id_user) REFERENCES users(id),
+    FOREIGN KEY(id_user) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(id_profile) REFERENCES user_profiles(id)
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE classes (
     max_students INT NULL,
     archived     BOOLEAN NOT NULL DEFAULT false,
 
-    FOREIGN KEY(id_courses) REFERENCES courses(id),
+    FOREIGN KEY(id_courses) REFERENCES courses(id) ON DELETE CASCADE, 
     FOREIGN KEY(id_teacher) REFERENCES users(id)
 );
 
@@ -168,11 +168,11 @@ INSERT INTO user_profiles (id, name) VALUES
 --   (6, 3),  -- Felipe -> STUDENT
 --   (7, 3);  -- Gabriela -> STUDENT
 
--- -- CURSOS
--- INSERT INTO courses (id_courses, name, description, max_students) VALUES
---   (1, 'Banco de Dados I',  'Introdução a bancos de dados relacionais.', 40),
---   (2, 'Programação Web',   'Fundamentos de desenvolvimento Web.',       35),
---   (3, 'Algoritmos',        'Lógica de programação e estruturas básicas.', 50);
+-- CURSOS
+INSERT INTO courses (id, name, description, max_students) VALUES
+  (1, 'Banco de Dados I',  'Introdução a bancos de dados relacionais.', 30),
+  (2, 'Programação Web',   'Fundamentos de desenvolvimento Web.',       30),
+  (3, 'Algoritmos',        'Lógica de programação e estruturas básicas.', 30);
 
 -- -- TURMAS
 -- INSERT INTO classes (id_classes, courses_id, teacher_id, starts_on, ends_on,

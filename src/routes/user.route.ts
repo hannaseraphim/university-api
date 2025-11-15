@@ -4,6 +4,7 @@ import {
   getAllUsers,
   createUser,
   deleteUser,
+  updateUser,
 } from "../controllers/user.controller.js";
 
 const router = Router();
@@ -11,9 +12,9 @@ const router = Router();
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
 
-// Rotas para criar usuário e para atualizar dados de usuário
+// Rotas para criar usuário e para deletar/atualizar dados de usuário
 router.post("/", createUser);
 router.delete("/:id", deleteUser);
-router.put("/:id", getUserById);
+router.put("/:id", updateUser);
 
 export default router;
