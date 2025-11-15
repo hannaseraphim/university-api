@@ -1,9 +1,8 @@
 import type { Connection } from "mysql2/promise";
 
-// absctract impede que algo como 
+// absctract impede que algo como
 // const base = new BaseModel() aconteça
 export abstract class BaseModel {
-
   // abstract faz com que as outras classes sejam obrigadas a definir uma "table" e um "fields"
   protected abstract table: string;
   protected abstract fields: string[];
@@ -14,27 +13,32 @@ export abstract class BaseModel {
   // Create item
   async create(data: Record<string, any>) {
     //Validate fields
- 
+
     // Acessa o nome dos campos (name, description, etc) com Object.keys(data)
     // Filtra os campos um por um com o .filter(key => ...)
     // Checa se a key(campo) NÃO aparece na lista dos campos (data) com .includes(key)
-    const invalid = Object.keys(data).filter(key => !this.fields.includes(key));
-    if (invalid.length) throw new Error(`Invalid fields: ${invalid.join(", ")}`);
+    const invalid = Object.keys(data).filter(
+      (key) => !this.fields.includes(key)
+    );
+    if (invalid.length)
+      throw new Error(`Invalid fields: ${invalid.join(", ")}`);
 
     // Transforma o Array em um único objeto, separando os campos apenas com o .join(", ")
     const columns = Object.keys(data).join(", ");
 
     // Cria um "?" para cada item com .map(() => "?")
     // Transforma o Array em um único objeto, separando os campos apenas com o .join(", ")
-    const placeholders = Object.keys(data).map(() => "?").join(", ");
+    const placeholders = Object.keys(data)
+      .map(() => "?")
+      .join(", ");
 
     // Pega o valor dos campos
     const values = Object.values(data);
 
     const query = `INSERT INTO \`${this.table}\` (${columns}) VALUES (${placeholders})`;
     const [result] = await this.db.execute(query, values);
-    return (result as any);
-  } 
+    return result as any;
+  }
 
   // Query item by id
   async findById(id: number) {
@@ -42,7 +46,7 @@ export abstract class BaseModel {
     const [rows] = await this.db.execute(query, [id]);
     return (rows as any)[0];
   }
-  
+
   // Query all items
   async findAll() {
     const query = `SELECT * FROM \`${this.table}\``;
@@ -58,7 +62,6 @@ export abstract class BaseModel {
 
   // Update item by id
   async update(id: number, data: Record<string, any>): Promise<boolean> {
-
     if (Object.keys(data).length === 0) {
       return false;
     }
@@ -66,13 +69,18 @@ export abstract class BaseModel {
     // Acessa o nome dos campos (name, description, etc) com Object.keys(data)
     // Filtra os campos um por um com o .filter(key => ...)
     // Checa se a key(campo) NÃO aparece na lista dos campos (data) com .includes(key)
-    const invalid = Object.keys(data).filter(key => !this.fields.includes(key));
-    if (invalid.length) throw new Error(`Invalid fields: ${invalid.join(", ")}`);
+    const invalid = Object.keys(data).filter(
+      (key) => !this.fields.includes(key)
+    );
+    if (invalid.length)
+      throw new Error(`Invalid fields: ${invalid.join(", ")}`);
 
     // Acessa o nome dos campos com Object.keys(data)
     // Depois mapeia cada objeto para "\`${key}\` = ?"
     // Sendo mesclados e separados com .join(", ")
-    const assignments = Object.keys(data).map(key => `\`${key}\` = ?`).join(", ");
+    const assignments = Object.keys(data)
+      .map((key) => `\`${key}\` = ?`)
+      .join(", ");
 
     // Adiciona os valores anteriores da data com "...Object.values(data)"
     const values = [...Object.values(data), id];
@@ -83,8 +91,8 @@ export abstract class BaseModel {
   }
 
   // Delete item by id
-  async delete(id: number): Promise<number> {
-    const query = `DELETE FROM \`${this.table}\` WHERE id = ?`;
+  async delete(id: number, condition: string): Promise<number> {
+    const query = `DELETE FROM \`${this.table}\` WHERE ${condition} = ?`;
     const [result] = await this.db.execute(query, [id]);
     return (result as any).affectedRows;
   }
@@ -98,7 +106,7 @@ export abstract class BaseModel {
       throw new Error("No valid criteria fields found.");
     }
 
-    const conditions = keys.map(key => `\`${key}\` = ?`).join(" AND ");
+    const conditions = keys.map((key) => `\`${key}\` = ?`).join(" AND ");
     const query = `SELECT * FROM \`${this.table}\` WHERE ${conditions}`;
 
     const [rows] = await this.db.execute(query, values);
@@ -107,7 +115,9 @@ export abstract class BaseModel {
 
   // Check if the fields are valid in the model
   async validateFields(data: Record<string, any>): Promise<string[]> {
-    const invalid = Object.keys(data).filter(key => !this.fields.includes(key));
+    const invalid = Object.keys(data).filter(
+      (key) => !this.fields.includes(key)
+    );
     return invalid;
   }
 
@@ -116,7 +126,13 @@ export abstract class BaseModel {
     if (!("requiredFields" in this)) return [];
 
     const required = (this as any).requiredFields as string[];
-    const missing = required.filter(field => !(field in data) || data[field] === undefined || data[field] === null || data[field] === "");
+    const missing = required.filter(
+      (field) =>
+        !(field in data) ||
+        data[field] === undefined ||
+        data[field] === null ||
+        data[field] === ""
+    );
     return missing;
   }
 }
