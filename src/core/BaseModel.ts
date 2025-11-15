@@ -33,7 +33,7 @@ export abstract class BaseModel {
 
     const query = `INSERT INTO \`${this.table}\` (${columns}) VALUES (${placeholders})`;
     const [result] = await this.db.execute(query, values);
-    return (result as any).affectedRows;
+    return (result as any);
   } 
 
   // Query item by id
